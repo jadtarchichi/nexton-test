@@ -1,0 +1,9 @@
+.header{
+    display: flex;
+    background-color: black;
+}
+
+.header .orange-logo{
+    width: 50px;
+    margin: 8px;
+}

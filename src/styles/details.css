@@ -1,0 +1,49 @@
+.details{
+    position: relative;
+    min-height: 50vh;
+}
+
+.details .image img{
+    width: 100%;
+}
+
+.details .content{
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.details .content div{
+    padding: 8px;
+}
+
+.details .content div:first-child{
+    font-size: 24px;
+}
+
+.details .content button{
+    padding: 8px;
+    background-color: white;
+    color: #ff7900;
+    border: none;
+    border-radius: 16px;
+    width: 80px;
+}
+
+.details .content button:hover{
+    background-color: #ff7900;
+    color: white;
+    cursor: pointer;
+}
+
+.details .error-message{
+    text-align: center;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 32px;
+}

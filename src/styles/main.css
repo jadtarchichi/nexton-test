@@ -1,0 +1,98 @@
+@font-face {
+    font-family: "Helvetica";
+    src: url("../font/helvetica-neue-lt-cufonfonts-webfont/Helvetica\ Neue\ LT\ 45\ Light.woff") format("woff"),
+           url("../font/helvetica-neue-lt-cufonfonts-webfont/Helvetica\ Neue\ LT\ 35\ Thin.woff") format("woff");
+}
+
+*{
+    outline: none;
+}
+
+body{
+    margin: 0;
+}
+
+.main {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    font-family: "Helvetica";
+}
+
+/* Start loading CSS */
+.lds-circle {
+    display: inline-block;
+    transform: translateZ(1px);
+}
+.lds-circle > div {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin: 8px;
+    border-radius: 50%;
+    background: #fff;
+    animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes lds-circle {
+    0%, 100% {
+        animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+    }
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(1800deg);
+        animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+    }
+    100% {
+        transform: rotateY(3600deg);
+    }
+}
+/* End loading CSS */
+
+.modal {
+    position: relative;
+    padding: 26px 12px;
+    background-color: #fff;
+    text-align: center;
+}
+
+@media(max-width: 860px) {
+    .modal{
+        width: 80%;
+    }
+}
+
+.modal .close-modal{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 14px;
+}
+
+/* Start vue-universal-modal CSS */
+.container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.max-w-full {
+    max-width: 100%;
+}
+.w-full {
+    width: 100%;
+}
+.h-full {
+    height: 100%;
+}
+/* End vue-universal-modal CSS */
