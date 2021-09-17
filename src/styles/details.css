@@ -33,6 +33,7 @@
     border: none;
     border-radius: 16px;
     width: 80px;
+    font-weight: bold;
 }
 
 .details .content button:hover{

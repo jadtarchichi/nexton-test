@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link to="/">
-      <img class="orange-logo" src="@/assets/logo-orange.png" />
+      <img class="logo-ocs" src="@/assets/logo-ocs.png" />
     </router-link>
   </div>
 </template>

@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import '../../node_modules/shaka-player/dist/controls.css'; /* Shaka player CSS import */
+
 export default {
   props: {
     manifestUrl: {
@@ -58,7 +60,6 @@ export default {
 </script>
 
 <style>
-@import '../../node_modules/shaka-player/dist/controls.css'; /* Shaka player CSS import */
 .size {
   width: 800px;
 }

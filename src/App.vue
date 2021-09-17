@@ -2,6 +2,9 @@
   <Header />
   <div class="main">
     <router-view />
+    <div class="scrollTop" @click="scrollTop()">
+      <font-icon icon="arrow-alt-circle-up" size="4x" style="color: #ff7900" />
+    </div>
   </div>
   <div id="modals"></div>
 </template>
@@ -20,8 +23,12 @@ export default {
   },
   methods: {
     leaving() {
-      localStorage.setItem("orange-search-Text", "");
+      localStorage.setItem("ocs-search-Text", "");
+      localStorage.setItem("ocs-search-limit-count", "");
     },
+    scrollTop(){
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
   }
 };
 </script>

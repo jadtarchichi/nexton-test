@@ -1,8 +1,9 @@
 <template>
   <div class="home">
     <div class="search-form">
-      <div class="lds-circle" v-if="isLoading"><div></div></div>
-
+      <div class="loading-box">
+        <div class="lds-circle" v-if="isLoading"><div></div></div>
+      </div>
       <div>
         <input
           v-model="searchText"
@@ -15,51 +16,75 @@
 
       <div>
         <span
-          class="search-icon"
+          class="search-box"
           :class="!searchText || isLoading ? 'disabled-cursor' : ''"
           @click="search()"
-          ><img src="@/assets/search-icon.png"
-        /></span>
+        >
+          <font-icon icon="search" class="font-search" size="2x" />
+        </span>
       </div>
     </div>
 
-    <div class="search-result" v-if="!isLoading && searchResult != null">
-      <div class="no-results">
-        {{ !searchResult.contents ? "Aucun Résultat" : "" }}
-      </div>
-
-      <div class="wrapper">
+    <div class="search-result" v-if="!isLoading && searchClicked">
+      <div class="wrapper" v-if="listItems.length > 0">
         <div
           class="item"
-          v-for="item in searchResult.contents"
+          v-for="item in listItems"
           :key="item"
           @click="goToDetails(item)"
         >
           <div>
-            <img :src="baseImageUrl + item.imageurl" />
+            <img v-if="item.imageurl" :src="baseImageUrl + item.imageurl" />
           </div>
-          <div>
+          <div class="title">
             <b>{{ item.title[0].value }}</b>
           </div>
           <div>{{ item.subtitle }}</div>
         </div>
       </div>
+
+      <div v-else class="no-results">Aucun Résultat</div>
+
+      <Pagination
+        :showMore="limitNumber < this.searchResult.total"
+        :showLess="limitNumber > 8"
+        @editLimitCount="editLimitCount"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import "@/styles/home.css"
+import "@/styles/home.css";
+import Pagination from "@/components/Pagination";
+import { getSearch } from "@/services/api";
 
 export default {
   name: "Home",
+  components: {
+    Pagination,
+  },
   data() {
     return {
       isLoading: false,
-      searchText: localStorage.getItem("orange-search-Text") || "",
-      searchResult: null,
+      searchClicked: false,
+      searchText: localStorage.getItem("ocs-search-Text") || "",
+      searchResult: {},
+      limitNumber: localStorage.getItem("ocs-search-limit-count") || 8,
       baseImageUrl: process.env.VUE_APP_IMAGEURL,
     };
+  },
+  computed: {
+    listItems() {
+      if (!this.searchResult.total) return [];
+
+      return this.searchResult.contents.filter((item, index) => {
+        if (index < this.limitNumber) {
+          return true;
+        }
+        return false;
+      });
+    },
   },
   mounted() {
     if (this.searchText) {
@@ -70,13 +95,9 @@ export default {
     search() {
       if (!this.searchText || this.isLoading) return;
 
+      this.searchClicked = true;
       this.isLoading = true;
-      this.axios
-        .get(
-          process.env.VUE_APP_APIURL +
-            "/contents?search=title=" +
-            this.searchText
-        )
+      getSearch(this.searchText)
         .then((response) => {
           this.searchResult = response.data;
         })
@@ -88,17 +109,36 @@ export default {
         });
     },
     goToDetails(item) {
-      localStorage.setItem("orange-search-Text", this.searchText);
-      
+      localStorage.setItem("ocs-search-Text", this.searchText);
+
+      // Normalement on appel un API pour retourner les informations
+      // on peut résoudre par params ou par store
       this.$router.push({
         name: "Details",
-        params: { id: item.id, mode: item.detaillink.includes('programme') ? "programme" : "serie" },
+        params: {
+          id: item.detaillink.split("/").pop(),
+          mode: item.detaillink.includes("programme") ? "programme" : "serie",
+          item: JSON.stringify({
+            title: item.title[0].value,
+            subTitle: item.subtitle,
+            fullScreenImage: item.fullscreenimageurl,
+          }),
+        },
       });
     },
     searchInputChanged() {
       if (!this.searchText) {
-        localStorage.setItem("orange-search-Text", "");
+        localStorage.setItem("ocs-search-Text", "");
       }
+    },
+    editLimitCount(pag) {
+      if (pag == "add") {
+        this.limitNumber = parseInt(this.limitNumber) + 8;
+      } else if (pag == "remove") {
+        this.limitNumber = parseInt(this.limitNumber) - 8;
+      }
+
+      localStorage.setItem("ocs-search-limit-count", this.limitNumber);
     },
   },
 };

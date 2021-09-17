@@ -1,0 +1,10 @@
+.pagination{
+   display: inline-flex;
+}
+
+.pagination div{
+    padding: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ff7900;
+}

@@ -4,7 +4,7 @@ import Details from "@/views/Details.vue";
 
 const routes = [
   {
-    path: "/details/:id/:mode",
+    path: "/details/:mode/:id",
     name: "Details",
     component: Details
   },
