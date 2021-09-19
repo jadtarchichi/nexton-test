@@ -5,7 +5,3 @@
     </router-link>
   </div>
 </template>
-
-<style scoped>
-@import "../styles/header.css";
-</style>

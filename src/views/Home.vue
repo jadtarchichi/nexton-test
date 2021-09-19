@@ -10,15 +10,15 @@
           placeholder="Recherche"
           class="search-input"
           @change="searchInputChanged()"
-          @keyup.enter="search()"
+          @keyup.enter="search(true)"
         />
       </div>
 
       <div>
         <span
           class="search-box"
-          :class="!searchText || isLoading ? 'disabled-cursor' : ''"
-          @click="search()"
+          :class="!searchText || isLoading ? 'disabled-cursor' : 'enabled-cursor'"
+          @click="search(true)"
         >
           <font-icon icon="search" class="font-search" size="2x" />
         </span>
@@ -46,9 +46,9 @@
       <div v-else class="no-results">Aucun Résultat</div>
 
       <Pagination
-        :showMore="limitNumber < this.searchResult.total"
-        :showLess="limitNumber > 8"
-        @editLimitCount="editLimitCount"
+        :limitNumber="parseInt(limitNumber)"
+        :totalCount="searchResult.total"
+        @editLimitNumber="editLimitNumber"
       />
     </div>
   </div>
@@ -70,7 +70,7 @@ export default {
       searchClicked: false,
       searchText: localStorage.getItem("ocs-search-Text") || "",
       searchResult: {},
-      limitNumber: localStorage.getItem("ocs-search-limit-count") || 8,
+      limitNumber: localStorage.getItem("ocs-search-limit-number") || 8,
       baseImageUrl: process.env.VUE_APP_IMAGEURL,
     };
   },
@@ -78,12 +78,7 @@ export default {
     listItems() {
       if (!this.searchResult.total) return [];
 
-      return this.searchResult.contents.filter((item, index) => {
-        if (index < this.limitNumber) {
-          return true;
-        }
-        return false;
-      });
+      return this.searchResult.contents.slice(0, this.limitNumber);
     },
   },
   mounted() {
@@ -92,11 +87,17 @@ export default {
     }
   },
   methods: {
-    search() {
+    search(editLimit) {
       if (!this.searchText || this.isLoading) return;
 
       this.searchClicked = true;
       this.isLoading = true;
+
+      if (editLimit) {
+        this.limitNumber = 8;
+        this.editLocalStorage("ocs-search-limit-number", this.limitNumber);
+      }
+
       getSearch(this.searchText)
         .then((response) => {
           this.searchResult = response.data;
@@ -109,36 +110,37 @@ export default {
         });
     },
     goToDetails(item) {
-      localStorage.setItem("ocs-search-Text", this.searchText);
+      this.editLocalStorage("ocs-search-Text", this.searchText);
 
-      // Normalement on appel un API pour retourner les informations
-      // on peut résoudre par params ou par store
       this.$router.push({
         name: "Details",
         params: {
           id: item.detaillink.split("/").pop(),
           mode: item.detaillink.includes("programme") ? "programme" : "serie",
-          item: JSON.stringify({
-            title: item.title[0].value,
-            subTitle: item.subtitle,
-            fullScreenImage: item.fullscreenimageurl,
-          }),
+        },
+        query: {
+          title: item.title[0].value,
+          subTitle: item.subtitle,
+          fullScreenImage: item.fullscreenimageurl,
         },
       });
     },
     searchInputChanged() {
       if (!this.searchText) {
-        localStorage.setItem("ocs-search-Text", "");
+        this.editLocalStorage("ocs-search-Text", "");
       }
     },
-    editLimitCount(pag) {
+    editLimitNumber(pag) {
       if (pag == "add") {
         this.limitNumber = parseInt(this.limitNumber) + 8;
       } else if (pag == "remove") {
         this.limitNumber = parseInt(this.limitNumber) - 8;
       }
 
-      localStorage.setItem("ocs-search-limit-count", this.limitNumber);
+      this.editLocalStorage("ocs-search-limit-number", this.limitNumber);
+    },
+    editLocalStorage(id, value) {
+      localStorage.setItem(id, value);
     },
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
-    <div v-if="showMore" @click="edit('add')">Voir Plus <font-icon icon="plus" /></div>
-    <div v-if="showLess" @click="edit('remove')">Voir Moins <font-icon icon="minus" /></div>
+    <div v-if="limitNumber < totalCount" @click="edit('add')">Voir Plus <font-icon icon="plus" /></div>
+    <div v-if="limitNumber > 8" @click="edit('remove')">Voir Moins <font-icon icon="minus" /></div>
   </div>
 </template>
 
@@ -10,20 +10,20 @@ import '@/styles/pagination.css'
 
 export default {
   props: {
-    showMore: {
-      type: Boolean,
-      default: false,
+    limitNumber: {
+      type: Number,
+      default: 8,
       required: true,
     },
-    showLess: {
-      type: Boolean,
-      default: false,
+    totalCount: {
+      type: Number,
+      default: 0,
       required: true,
     }
   },
   methods:{
     edit(text){
-      this.$emit("edit-limit-count", text);
+      this.$emit("edit-limit-number", text);
     }
   }
 };

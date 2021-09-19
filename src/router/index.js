@@ -4,14 +4,18 @@ import Details from "@/views/Details.vue";
 
 const routes = [
   {
-    path: "/details/:mode/:id",
-    name: "Details",
+    path: '/details/:mode/:id',
+    name: 'Details',
     component: Details
   },
   {
-    path: "/",
-    name: "Home",
+    path: '/',
+    name: 'Home',
     component: Home,
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/'
   },
 ];
 

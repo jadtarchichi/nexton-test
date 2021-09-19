@@ -54,8 +54,8 @@ export default {
   name: "Details",
   components: { VideoPlayer },
   created() {
-    if (this.$route.params.item)
-      this.item = JSON.parse(this.$route.params.item);
+    if (this.$route.query)
+      this.item = this.$route.query;
     else {
       this.$router.push({ name: "Home" });
     }
@@ -91,8 +91,6 @@ export default {
                 ? (response.data.contents.seasons[0] || {}).pitch
                 : response.data.contents.pitch,
           };
-
-          console.log("this.item", this.item);
         })
         .catch(() => {
           this.item = {};

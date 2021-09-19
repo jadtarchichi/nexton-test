@@ -11,6 +11,7 @@
 
 <script>
 import "@/styles/main.css";
+import "@/styles/header.css";
 import Header from "@/components/Header.vue";
 
 export default {
@@ -24,7 +25,7 @@ export default {
   methods: {
     leaving() {
       localStorage.setItem("ocs-search-Text", "");
-      localStorage.setItem("ocs-search-limit-count", "");
+      localStorage.setItem("ocs-search-limit-number", "");
     },
     scrollTop(){
       window.scrollTo({top: 0, behavior: 'smooth'});
